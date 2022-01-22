@@ -108,7 +108,7 @@ export default {
     return {
       smdl: true,
       loginForm: {
-        username: "admin",
+        username: "000001",
         checkPass: "",
         password: ""
       },
@@ -130,12 +130,13 @@ export default {
         password: this.loginForm.password
       });
       console.log(res);
-      if (res.code == 200) {
+      if (res.status == 0) {
+        sessionStorage.setItem("userName", this.loginForm.username);
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("isLogin", true);
-        sessionStorage.setItem("userInfo", JSON.stringify(res.data.info));
+        sessionStorage.setItem("userInfo", JSON.stringify(res.data));
         this.$message({
-          message: res.message,
+          message: '登录成功',
           type: "success"
         });
         setTimeout(() => {
@@ -153,7 +154,8 @@ export default {
 #login {
   width: 100%;
   height: 100vh;
-  background-color: #000000;
+  // background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
   .container {
     position: relative;
     width: 100%;

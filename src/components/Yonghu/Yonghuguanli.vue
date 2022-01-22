@@ -4,7 +4,7 @@
       <div class="tit1">用户管理</div>
     </div>
     <div class="nav2">
-      <!-- <div class="myForm">
+      <div class="myForm">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="关键词搜索：">
             <el-input size="small" v-model="formInline.name"></el-input>
@@ -13,13 +13,13 @@
             <el-button size="small" type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
         </el-form>
-      </div>-->
-      <!-- <div class="tit1">
-        <el-button @click="toAddShop" size="small" type="primary" icon="el-icon-plus">添加商品</el-button>
-      </div>-->
+      </div>
+      <div class="tit1">
+        <el-button @click="toAddShop" size="small" type="primary" icon="el-icon-plus">创建用户</el-button>
+      </div>
       <div class="myTable">
         <vxe-table :data="tableData">
-          <vxe-table-column type="expand" width="30" :fixed="null">
+          <!-- <vxe-table-column type="expand" width="30" :fixed="null">
             <template #content="{ row }">
               <template>
                 <div class="xiala" v-if='row.realname'>
@@ -68,14 +68,14 @@
                 </div>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="uid" title="ID"></vxe-table-column>
-          <vxe-table-column field="myNickname" title="昵称"></vxe-table-column>
+          </vxe-table-column>-->
+          <vxe-table-column field="id" title="ID"></vxe-table-column>
+          <vxe-table-column field="nickName" title="昵称"></vxe-table-column>
           <vxe-table-column field="avatar" title="发布者头像">
             <template slot-scope="scope">
               <el-image
-                :src="scope.row.avatar"
-                :preview-src-list="[scope.row.avatar]"
+                :src="scope.row.faceUrl"
+                :preview-src-list="[scope.row.faceUrl]"
                 fit="fill"
                 style="width: 40px; height: 40px"
               >
@@ -85,9 +85,12 @@
               </el-image>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="now_money" title="余额"></vxe-table-column>
-          <vxe-table-column field="brokerage_price" title="佣金"></vxe-table-column>
-          <vxe-table-column field="integral" title="积分"></vxe-table-column>
+          <vxe-table-column field="email" title="邮箱"></vxe-table-column>
+          <vxe-table-column field="phone" title="电话号码"></vxe-table-column>
+          <vxe-table-column field="standby1" title="备用1"></vxe-table-column>
+          <vxe-table-column field="standby2" title="备用2"></vxe-table-column>
+          <vxe-table-column field="standby3" title="备用3"></vxe-table-column>
+          <vxe-table-column field="standby4" title="备用4"></vxe-table-column>
           <vxe-table-column field="myStatus" title="状态"></vxe-table-column>
           <!-- <vxe-table-column field="myStatus" width="120" title="状态(是否通过)">
             <template slot-scope="scope">
@@ -97,8 +100,8 @@
           <vxe-table-column title="操作状态(审核)" width="140">
             <template slot-scope="scope">
               <div class="flex">
-                <el-button size="small" :disabled='!scope.row.realname || scope.row.realname.status != 0' @click="tongguo(scope.row)" type="text">通过</el-button>
-                <el-button size="small" :disabled='!scope.row.realname || scope.row.realname.status != 0' @click="jujue(scope.row)" type="text">拒绝</el-button>
+                <el-button size="small" @click="tongguo(scope.row)" type="text">修改</el-button>
+                <el-button size="small" @click="jujue(scope.row)" type="text">删除</el-button>
                 <!-- <el-button size="small" @click="toEditShop(scope.row)" type="text">查看评论</el-button> -->
                 <!-- <el-button size="small" @click="toDelShop(scope.row)" type="text">删除</el-button> -->
               </div>
@@ -172,6 +175,106 @@
         ></el-pagination>
       </div>
     </el-dialog>
+    <!-- 编辑 -->
+    <el-dialog
+      title="编辑"
+      :visible.sync="addDialogVisible"
+      width="700px"
+      :before-close="addHandleClose"
+    >
+      <div class="myAddForm">
+        <el-form :model="addForm" ref="addForm" label-width="100px" class="demo-addForm">
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="用户名">
+                <el-input size="small" v-model="addForm.nickName"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col v-if="isAdd" :span="20">
+              <el-form-item label="密码">
+                <el-input size="small" v-model="addForm.password"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="!isAdd">
+            <el-col :span="20">
+              <el-form-item label="用户头像">
+                <div @click="companyList('tx')" class="myImg">
+                  <el-image :src="addForm.imgUrl" fit="fill" style="width: 62px; height: 62px">
+                    <div slot="error" class="image-slot">
+                      <i class="el-icon-picture-outline"></i>
+                    </div>
+                  </el-image>
+                  <div @click.stop="delImg('tx')" class="closeBtn">
+                    <el-button circle>×</el-button>
+                  </div>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="手机号">
+                <el-input size="small" v-model="addForm.phone"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="邮箱">
+                <el-input size="small" v-model="addForm.email"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col v-if="!isAdd" :span="20">
+              <el-form-item label="备用1">
+                <el-input size="small" v-model="addForm.standby1"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col v-if="!isAdd" :span="20">
+              <el-form-item label="备用2">
+                <el-input size="small" v-model="addForm.standby2"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col v-if="!isAdd" :span="20">
+              <el-form-item label="备用3">
+                <el-input size="small" v-model="addForm.standby3"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col v-if="!isAdd" :span="20">
+              <el-form-item label="备用4">
+                <el-input size="small" v-model="addForm.standby4"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item>
+                <el-button size="small" type="primary" @click="AddOnSubmit">提交</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
+    <input
+      type="file"
+      name="companyLogo"
+      id="file0"
+      class="displayN"
+      multiple="multiple"
+      @change="companyLogo($event)"
+      ref="fileInputList"
+    />
   </div>
 </template>
 
@@ -206,6 +309,21 @@ export default {
   },
   data() {
     return {
+      isAdd: null,
+      file: null,
+      imgFile: null,
+      addForm: {
+        imgUrl: "",
+        nickName: "",
+        password: "",
+        phone: "",
+        email: "",
+        standby1:'',
+        standby2:'',
+        standby3:'',
+        standby4:'',
+      },
+      addDialogVisible: false,
       searchPinlunForm: {
         keyword: ""
       },
@@ -226,56 +344,133 @@ export default {
   },
   created() {
     this.$store.commit("biaobaiqiangPinglunPage", 1);
+    this.$store.commit("jishiShougouPage", 1);
     this.getData();
   },
   methods: {
     async getData() {
-      const res = await this.$api.user_list({
-        limit: this.jishiShougouPageSize,
-        page: this.jishiShougouPage
+      const res = await this.$api.muGetUsers({
+        pageSize: this.jishiShougouPageSize,
+        pageNow: this.jishiShougouPage,
+        account: this.formInline.name
       });
       console.log(res.data.data);
       this.total = res.data.total;
       this.tableData = res.data.data;
       this.tableData.forEach(ele => {
-        ele.myStatus = ele.realname && ele.realname.status == 0 ? '待审核' : ele.realname && ele.realname.status == 1 ? '审核通过' : '未实名'; 
-        ele.myNickname =
-          ele.nickname == "" || !ele.nickname ? "匿名用户" : ele.nickname;
-        if(ele.realname){
-          ele.realname.front_img = `${this.$url}/${ele.realname.front_img}`
-          ele.realname.back_img = `${this.$url}/${ele.realname.back_img}`
-        }
-        if (ele.img_paths) {
-          ele.myImg_paths = ele.img_paths.split(",");
-          ele.myImg_paths.forEach((img, i) => {
-            this.$set(ele.myImg_paths, i, `${this.$url}/${img}`);
-          });
-        }
+        ele.myStatus =
+          ele.realname && ele.realname.status == 0
+            ? "待审核"
+            : ele.realname && ele.realname.status == 1
+            ? "审核通过"
+            : "未实名";
       });
     },
-    async tongguo(row){
-      const res = await this.$api.user_check_realname({
-        id:row.realname.id,
-        status:1
-      })
-      console.log(res)
-      if (res.code == 200) {
-        this.$message({
-          message: res.message,
-          type: "success"
+    addHandleClose() {
+      this.addDialogVisible = false;
+    },
+    async AddOnSubmit() {
+      if (this.isAdd) {
+        // 添加
+        // this.imgFile.append("phone", this.addForm.phone);
+        // this.imgFile.append("password", this.addForm.password);
+        // this.imgFile.append("nickName", this.addForm.nickName);
+        // this.imgFile.append("email", this.addForm.email);
+        const res = await this.$api.mCuser({
+          phone: this.addForm.phone,
+          password: this.addForm.password,
+          nickName: this.addForm.nickName,
+          email: this.addForm.email,
+          role:0
         });
-        this.getData();
+        console.log(res);
+        if (res.status == 0) {
+          this.$message({
+            message: res.msg,
+            type: "success"
+          });
+          this.getData();
+          this.addDialogVisible = false;
+        }else{
+          this.$message({
+            message: res.msg,
+            type: "warning"
+          });
+        }
+      } else {
+        if (!this.file) {
+          this.file = null;
+        }
+        if(this.addForm.password == ''){
+          this.addForm.password = null;
+        }
+        this.imgFile.append("file", this.file);
+        this.imgFile.append("phone", this.addForm.phone);
+        this.imgFile.append("password", this.addForm.password);
+        this.imgFile.append("nickName", this.addForm.nickName);
+        this.imgFile.append("email", this.addForm.email);
+        this.imgFile.append("account", this.rowId);
+        this.imgFile.append("standby1", this.addForm.standby1);
+        this.imgFile.append("standby2", this.addForm.standby2);
+        this.imgFile.append("standby3", this.addForm.standby3);
+        this.imgFile.append("standby4", this.addForm.standby4);
+        const res = await this.$api.muUpdateUser(this.imgFile);
+        console.log(res);
+        if (res.status == 0) {
+          this.$message({
+            message: res.message,
+            type: "success"
+          });
+          this.getData();
+          this.addDialogVisible = false;
+        }
       }
     },
-    async jujue(row){
-      const res = await this.$api.user_check_realname({
-        id:row.realname.id,
-        status:-1
-      })
-      console.log(res)
-      if (res.code == 200) {
+    tongguo(row) {
+      this.isAdd = false;
+      this.imgFile = new FormData();
+      this.rowId = row.id;
+      this.addForm.phone = row.phone;
+      this.addForm.imgUrl = row.imgUrl;
+      this.addForm.password = '';
+      this.addForm.nickName = row.nickName;
+      this.addForm.email = row.email;
+      this.addForm.standby1 = row.standby1;
+      this.addForm.standby2 = row.standby2;
+      this.addForm.standby3 = row.standby3;
+      this.addForm.standby4 = row.standby4;
+      this.addDialogVisible = true;
+    },
+    // 上传图片
+    companyList(val, i = 0) {
+      this.imgIndex = i;
+      this.imgStatus = val;
+      this.$refs.fileInputList.click();
+    },
+    async companyLogo(event) {
+      this.file = event.target.files[0];
+      let url = null;
+      if (window.createObjectURL != undefined) {
+        // basic
+        url = window.createObjectURL(this.file);
+      } else if (window.webkitURL != undefined) {
+        // webkit or chrome
+        url = window.webkitURL.createObjectURL(this.file);
+      } else if (window.URL != undefined) {
+        // mozilla(firefox)
+        url = window.URL.createObjectURL(this.file);
+      }
+      console.log(url);
+      this.$set(this.addForm, "imgUrl", url);
+    },
+    async jujue(row) {
+      const res = await this.$api.muDelUser({
+        account: row.id
+      });
+      console.log(res);
+      if (res.status == 0) {
         this.$message({
-          message: res.message,
+          message: res.msg,
           type: "success"
         });
         this.getData();
@@ -364,8 +559,16 @@ export default {
       this.getData();
     },
     toAddShop() {
-      this.$store.commit("shopObj", null);
-      this.$router.push({ name: "Tianjiashangping" });
+      this.imgFile = new FormData();
+      this.isAdd = true;
+      this.addForm.phone = "";
+      this.addForm.imgUrl = "";
+      this.addForm.password = "";
+      this.addForm.nickName = "";
+      for (const key in this.addForm) {
+        this.addForm[key] = ''
+      }
+      this.addDialogVisible = true;
     },
     // 分页
     handleSizeChange(val) {
@@ -512,5 +715,61 @@ export default {
     margin-bottom: 0;
     vertical-align: middle;
   }
+}
+.myAddForm {
+  /deep/ .el-select {
+    width: 100%;
+  }
+  /deep/ .el-form-item__label {
+    font-size: 12px;
+    width: 130px !important;
+  }
+  /deep/ .el-form-item__content {
+    margin-left: 130px !important;
+  }
+  /deep/ .el-radio__label {
+    font-size: 12px;
+  }
+  /deep/ .el-button {
+    width: 100%;
+  }
+  .myImg {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    margin-right: 12px;
+    .closeBtn {
+      position: absolute;
+      top: -6px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      .el-button {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    /deep/ .image-slot {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fafafa;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .el-icon-picture-outline {
+        font-size: 20px;
+      }
+    }
+  }
+}
+.displayN {
+  display: none;
 }
 </style>

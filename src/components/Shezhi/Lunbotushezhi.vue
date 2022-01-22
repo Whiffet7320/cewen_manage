@@ -1,38 +1,36 @@
 <template>
   <div class="index">
     <div class="nav1">
-      <div class="tit1">轮播图设置</div>
+      <div class="tit1">说明/协议</div>
     </div>
     <div class="nav2">
       <div class="myForm">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="设置轮播图：">
-                <div @click="companyList" class="myImg">
-                  <el-image :src="ruleForm.img" fit="fill" style="width: 200px; height: 200px">
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline"></i>
-                    </div>
-                  </el-image>
-                  <div @click.stop="delImg" class="closeBtn">
-                    <el-button circle>×</el-button>
-                  </div>
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="跳转地址：">
-                <el-input size="small" v-model="ruleForm.other_url"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item>
-            <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="submitForm">提交</el-button>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="类型：">
+            <el-radio-group v-model="formInline.rad1" size="small" @change="changRad1">
+              <el-radio-button label="0">说明</el-radio-button>
+              <el-radio-button label="1">协议</el-radio-button>
+            </el-radio-group>
           </el-form-item>
+          <el-row :span="22">
+          <el-col style="margin-top:20px">
+            <el-form-item label="内容：">
+            <el-input type="textarea" :rows='30' v-model="formInline.desc"></el-input>
+          </el-form-item>
+          </el-col>
+        </el-row>
         </el-form>
+        <!-- <el-row>
+          <el-col :span="22">
+            <div class="myEditor">
+              <el-input type="textarea" v-model="formInline.desc"></el-input>
+            </div>
+          </el-col>
+        </el-row> -->
+        <div class="btnflex">
+          <!-- <el-button size="small" type="primary" @click="submitForm('ruleForm', '3')">下一步</el-button> -->
+          <el-button size="small" type="primary" @click="onSubmitForm">保存</el-button>
+        </div>
       </div>
     </div>
     <input
@@ -48,68 +46,119 @@
 </template>
 
 <script>
+// import E from "wangeditor";
 export default {
   data() {
     return {
+      formInline: {
+        rad1: "0",
+        desc:'',
+      },
+      editor: null,
       imgFile: "",
       ruleForm: {
         img: "",
         other_url: ""
-      }
+      },
+      content: ""
     };
   },
+  created() {
+    this.getData();
+  },
   methods: {
-    // 提交
-    async submitForm() {
-      const res = await this.$api.banner_add({
-        url: this.ruleForm.img,
-        other_url: this.ruleForm.other_url
+    async getData() {
+      const res = await this.$api.mGeteandp({
+        type: this.formInline.rad1
       });
       console.log(res);
-      if (res.code == 200) {
+      this.formInline.desc = res.data;
+      if (this.content) {
+        this.editor.txt.html(this.content);
+      }
+    },
+    async onSubmitForm() {
+      const res = await this.$api.mUpeandp({
+        text: this.formInline.desc,
+        type:this.formInline.rad1
+      });
+      if (res.status == 0) {
         this.$message({
           message: res.msg,
           type: "success"
         });
-        this.$router.push({name:'Lunbotuliebiao'})
+        this.getData();
       }
     },
-    // 上传图片
-    companyList() {
-      this.$refs.fileInputList.click();
+    changRad1(e) {
+      console.log(e);
+      this.getData();
     },
-    // 删除图片
-    delImg() {
-      this.$set(this.ruleForm, "img", "");
-    },
-    async companyLogo(event) {
-      const that = this;
-      var file = event.target.files[0];
-      var fileSize = file.size; //文件大小
-      var filetType = file.type; //文件类型
-      //创建文件读取对象
-      // console.log(file);
-      if (fileSize <= 10240 * 1024) {
-        if (
-          filetType == "image/png" ||
-          filetType == "image/jpeg" ||
-          filetType == "image/gif"
-        ) {
-          this.imgFile = new FormData();
-          this.imgFile.append("image", file);
-          sessionStorage.setItem("img", 123);
-          const res = await that.$api.upload_pic(this.imgFile);
-          console.log(res);
-          this.$set(this.ruleForm, "img", res.data.paht);
-          that.$refs.fileInputList.value = "";
-        } else {
-          this.$message.error("图片格式不正确");
-        }
-      } else {
-        this.$message.error("图片大小不正确");
-      }
+    readFileAsBuffer(file) {
+      const reader = new FileReader();
+      return new Promise(resolve => {
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          const base64File = reader.result.replace(
+            /^data:\w+\/\w+;base64,/,
+            ""
+          );
+          resolve(new window.OSS.Buffer(base64File, "base64"));
+        };
+      });
     }
   }
+  // async mounted() {
+  //   this.editor = new E("#editor");
+  //   this.editor.config.menus = [
+  //     "head",
+  //     "bold",
+  //     "fontSize",
+  //     "fontName",
+  //     "italic",
+  //     "underline",
+  //     "strikeThrough",
+  //     "indent",
+  //     "lineHeight",
+  //     "foreColor",
+  //     "backColor",
+  //     "list",
+  //     "justify",
+  //     "emoticon",
+  //     "image",
+  //     "table",
+  //     "undo",
+  //     "redo"
+  //   ];
+  //   this.editor.config.uploadImgServer = "/upload-img";
+  //   // this.editor.config.uploadImgShowBase64 = true; // 使用 base64 保存图片
+  //   const res = await this.$api.uploadToken();
+  //   let myData = res.data;
+  //   let client = new window.OSS.Wrapper({
+  //     region: myData.region, //oss地址
+  //     accessKeyId: myData.accessKeyId, //ak
+  //     accessKeySecret: myData.accessKeySecret, //secret
+  //     stsToken: myData.stsToken,
+  //     bucket: myData.bucket //oss名字
+  //   });
+  //   this.editor.config.customUploadImg = async (resultFiles, insertImgFn) => {
+  //     var file_re = await this.readFileAsBuffer(resultFiles[0]);
+  //     client
+  //       .put("myImg", file_re)
+  //       .then(function(res) {
+  //         // 上传图片，返回结果，将图片插入到编辑器中
+  //         console.log(res);
+  //         insertImgFn(res.url);
+  //       })
+  //       .catch(function(err) {
+  //         console.log(err);
+  //       });
+  //   };
+  //   this.editor.create();
+  //   if (this.content) {
+  //     this.editor.txt.html(this.content);
+  //   }
+  // }
 };
 </script>
 
@@ -139,6 +188,10 @@ export default {
     /deep/ .el-form-item {
       margin-right: 30px;
       margin-bottom: 0;
+      width: 100%;
+    }
+    /deep/ .el-form-item__content{
+      width: 90%;
     }
   }
   .myImg {
@@ -179,5 +232,25 @@ export default {
 }
 .displayN {
   display: none;
+}
+// 商品详情
+.myEditor {
+  padding-top: 20px;
+  display: flex;
+  .txt {
+    color: #606266;
+    width: 90px;
+    font-size: 12px;
+    margin-right: 12px;
+    margin-top: 2px;
+    text-align: right;
+  }
+  #editor {
+    transform: translateY(-6px);
+  }
+}
+.btnflex {
+  margin-top: 20px;
+  margin-left: 48px;
 }
 </style>

@@ -24,7 +24,9 @@ let myPut = axios.create({
 myPut.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
         config.headers = {
-            'token': sessionStorage.getItem("token"),
+            // 'token': sessionStorage.getItem("token"),
+            'headerAccount': sessionStorage.getItem("userName"),
+            'headerToken': sessionStorage.getItem("token"),
             // 'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
         }
     }
@@ -36,7 +38,8 @@ myPut.interceptors.request.use(config => {
 myDelete.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
         config.headers = {
-            'token': sessionStorage.getItem("token"),
+            'headerAccount': sessionStorage.getItem("userName"),
+            'headerToken': sessionStorage.getItem("token"),
             // 'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
             // 'Access-Control-Allow-Origin': '*',
             // "access-control-allow-credentials": "true"
@@ -50,7 +53,8 @@ myDelete.interceptors.request.use(config => {
 myPost.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
         config.headers = {
-            'token': sessionStorage.getItem("token"),
+            'headerAccount': sessionStorage.getItem("userName"),
+            'headerToken': sessionStorage.getItem("token"),
         }
     }
     return config;
@@ -62,7 +66,8 @@ myPost.interceptors.request.use(config => {
 myGet.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
         config.headers = {
-            'token': sessionStorage.getItem("token"),
+            'headerAccount': sessionStorage.getItem("userName"),
+            'headerToken': sessionStorage.getItem("token"),
         }
     }
     return config;
@@ -278,74 +283,326 @@ export default {
             }
         })
     },
-    order_list(obj) {
+    mstationStationPage(obj) {
         return myGet({
-            url: `${urls.order_list}`,
+            url: `${urls.mstationStationPage}`,
             params: {
                 ...obj
             }
         })
     },
-    webconfig_detail() {
-        return myGet({
-            url: `${urls.webconfig_detail}`,
-        })
-    },
-    webconfig_update(obj) {
+    mstationDelStation(obj) {
         return myPost({
-            url: urls.webconfig_update,
-            data: {
-                ...obj
-            }
-        })
-    },
-    user_check_realname(obj) {
-        return myGet({
-            url: `${urls.user_check_realname}`,
+            url: urls.mstationDelStation,
             params: {
                 ...obj
             }
         })
     },
-    order_send(obj) {
-        return myPost({
-            url: urls.order_send,
-            data: {
-                ...obj
-            }
-        })
-    },
-    withdraw_list(obj) {
+    muGetUsers(obj) {
         return myGet({
-            url: `${urls.withdraw_list}`,
+            url: `${urls.muGetUsers}`,
             params: {
                 ...obj
             }
         })
     },
-    express_list() {
+    muGetMusers(obj) {
         return myGet({
-            url: `${urls.express_list}`,
+            url: `${urls.muGetMusers}`,
+            params: {
+                ...obj
+            }
         })
     },
-    withdraw_check(obj) {
+    muDelUser(obj) {
         return myPost({
-            url: urls.withdraw_check,
+            url: urls.muDelUser,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mCuser(obj) {
+        return myPost({
+            url: urls.mCuser,
             data: {
                 ...obj
             }
         })
     },
-    async productUpload(image) {
+    mmGetMechanicalList(obj) {
+        return myGet({
+            url: `${urls.mmGetMechanicalList}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mmGetMechanicalPage(obj) {
+        return myGet({
+            url: `${urls.mmGetMechanicalPage}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mmDelMechanical(obj) {
+        return myPost({
+            url: urls.mmDelMechanical,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mBindmtos(obj) {
+        return myPost({
+            url: urls.mBindmtos,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mDelmtos(obj) {
+        return myPost({
+            url: urls.mDelmtos,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mGeteandp(obj) {
+        return myGet({
+            url: `${urls.mGeteandp}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mUpeandp(obj) {
+        return myPost({
+            url: urls.mUpeandp,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mBindstou(obj) {
+        return myPost({
+            url: urls.mBindstou,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mstationUsers(obj) {
+        return myGet({
+            url: `${urls.mstationUsers}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mDelstou(obj) {
+        return myPost({
+            url: urls.mDelstou,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mGetkfmb(obj) {
+        return myGet({
+            url: `${urls.mGetkfmb}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    memailEmails(obj) {
+        return myGet({
+            url: `${urls.memailEmails}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    memailInfo(obj) {
+        return myPost({
+            url: urls.memailInfo,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mUpdateKfMobile(obj) {
+        return myPost({
+            url: urls.mUpdateKfMobile,
+            params: {
+                ...obj
+            }
+        })
+    },
+    ermw(obj) {
+        return myGet({
+            url: `${urls.ermw}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mpointRealTimeDatas(obj) {
+        return myGet({
+            url: `${urls.mpointRealTimeDatas}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mpointUpdatePoint(obj) {
+        return myPost({
+            url: urls.mpointUpdatePoint,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mpointGetDatas(obj) {
+        return myPost({
+            url: urls.mpointGetDatas,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mpointDownloadHistory(obj) {
+        return myPost({
+            url: urls.mpointDownloadHistory,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mpointDelDownload(obj) {
+        return myPost({
+            url: urls.mpointDelDownload,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mdscheduleInfoPage(obj) {
+        return myGet({
+            url: `${urls.mdscheduleInfoPage}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mdscheduleInfo(obj) {
+        return myPost({
+            url: urls.mdscheduleInfo,
+            data: {
+                ...obj
+            }
+        })
+    },
+    mpointDpage(obj) {
+        return myGet({
+            url: `${urls.mpointDpage}`,
+            params: {
+                ...obj
+            }
+        })
+    },
+    mdscheduleDel(obj) {
+        return myPost({
+            url: urls.mdscheduleDel,
+            params: {
+                ...obj
+            }
+        })
+    },
+    async mUpdateQcode(obj) {
         var configs = {
             headers: {
                 "Content-Type": "multipart/form-data;charse=UTF-8",
-                'token': `${sessionStorage.getItem("token")}`,
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
             },
         };
-        const res = await axios
-            .post(`${urls.baseUrl}/admin/upload_product_pic`, image, configs)
-        return `${urls.baseUrl}/${res.data.data.path}`
+        const res = await axios.post(`${urls.baseUrl}${urls.mUpdateQcode}`,
+        obj, configs);
+        return res.data
+    },
+    async mmUpdateMechanical(obj) {
+        var configs = {
+            headers: {
+                "Content-Type": "multipart/form-data;charse=UTF-8",
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
+            },
+        };
+        const res = await axios.post(`${urls.baseUrl}${urls.mmUpdateMechanical}`,
+        obj, configs);
+        console.log(res.data)
+        return res.data
+    },
+    async mCstation(obj) {
+        var configs = {
+            headers: {
+                "Content-Type": "multipart/form-data;charse=UTF-8",
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
+            },
+        };
+        const res = await axios.post(`${urls.baseUrl}${urls.mCstation}`,
+        obj, configs);
+        console.log(res.data)
+        return res.data
+    },
+    // mstationUpdateStation(obj) {
+    //     return myPost({
+    //         url: urls.mstationUpdateStation,
+    //         data: {
+    //             ...obj
+    //         }
+    //     })
+    // },
+    async muUpdateUser(obj) {
+        var configs = {
+            headers: {
+                "Content-Type": "multipart/form-data;charse=UTF-8",
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
+            },
+        };
+        const res = await axios.post(`${urls.baseUrl}${urls.muUpdateUser}`,
+        obj, configs);
+        return res.data
+    },
+    async mstationUpdateStation(obj) {
+        var configs = {
+            headers: {
+                "Content-Type": "multipart/form-data;charse=UTF-8",
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
+            },
+        };
+        const res = await axios.post(`${urls.baseUrl}${urls.mstationUpdateStation}`,
+        obj, configs);
+        return res.data
+    },
+    async mUploadImg(image) {
+        var configs = {
+            headers: {
+                "Content-Type": "multipart/form-data;charse=UTF-8",
+                'headerAccount': sessionStorage.getItem("userName"),
+                'headerToken': sessionStorage.getItem("token"),
+            },
+        };
+        const res = await axios.post(`${urls.baseUrl}${urls.mUploadImg}`, image, configs);
+        return res.data
     },
     async upload_pic(image) {
         var configs = {
@@ -356,6 +613,6 @@ export default {
         };
         const res = await axios
             .post(`${urls.baseUrl}/admin/upload_pic`, image, configs)
-            return res.data
+        return res.data
     },
 }

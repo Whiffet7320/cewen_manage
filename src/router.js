@@ -22,6 +22,37 @@ const routes = [{
             path: 'Yonghuguanli',
             name: 'Yonghuguanli',
             component: () => import('./components/Yonghu/Yonghuguanli'),
+        }, {
+            path: 'Guanliyuanguanli',
+            name: 'Guanliyuanguanli',
+            component: () => import('./components/Yonghu/Guanliyuanguanli'),
+        }]
+    }, {
+        path: '/Jiancedian',
+        name: 'Jiancedian',
+        component: () => import('./components/Jiancedian'),
+        children: [{
+            path: 'Jiancedianguanli',
+            name: 'Jiancedianguanli',
+            component: () => import('./components/Jiancedian/Jiancedianguanli'),
+        }]
+    }, {
+        path: '/Shebei',
+        name: 'Shebei',
+        component: () => import('./components/Shebei'),
+        children: [{
+            path: 'Shebeiguanli',
+            name: 'Shebeiguanli',
+            component: () => import('./components/Shebei/Shebeiguanli'),
+        }]
+    }, {
+        path: '/Changzhan',
+        name: 'Changzhan',
+        component: () => import('./components/Changzhan'),
+        children: [{
+            path: 'Changzhanguanli',
+            name: 'Changzhanguanli',
+            component: () => import('./components/Changzhan/Changzhanguanli'),
         }]
     }, {
         path: '/Dingdan',
@@ -31,7 +62,7 @@ const routes = [{
             path: 'Dingdanguanli',
             name: 'Dingdanguanli',
             component: () => import('./components/Dingdan/Dingdanguanli'),
-        },{
+        }, {
             path: 'Tixianliebiao',
             name: 'Tixianliebiao',
             component: () => import('./components/Dingdan/Tixianliebiao'),
@@ -66,6 +97,15 @@ const routes = [{
             path: 'Shudongliebiao',
             name: 'Shudongliebiao',
             component: () => import('./components/Xiaoyuanshudong/Shudongliebiao'),
+        }]
+    }, {
+        path: '/Xiazai',
+        name: 'Xiazai',
+        component: () => import('./components/Xiazai'),
+        children: [{
+            path: 'Xiazaiguanli',
+            name: 'Xiazaiguanli',
+            component: () => import('./components/Xiazai/Xiazaiguanli'),
         }]
     }, {
         path: '/Xiaoyuanyijiao',
@@ -183,7 +223,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     routes,
 })
 

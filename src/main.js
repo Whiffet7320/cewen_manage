@@ -20,7 +20,7 @@ Vue.use(VXETable)
 // Vue.prototype.$uploadOSS = uploadOSS;
 Vue.prototype.$api = api;
 // Vue.prototype.$url = 'http://192.168.50.142:9004'
-Vue.prototype.$url = 'http://192.168.50.142:9007'
+Vue.prototype.$url = 'http://cwapi.bjhfjn.com'
 
 Vue.use(ElementUI);
 Vue.use(Viewer)
@@ -41,8 +41,10 @@ router.beforeEach((to, from, next) => {
 
 Vue.config.productionTip = false
 
-new Vue({
+let vm = new Vue({
   render: h => h(App),
   router,
   store,
 }).$mount('#app')
+
+export default vm

@@ -4,94 +4,84 @@
       <div class="tit1">其他设置</div>
     </div>
     <div class="nav2">
-      <!-- <div class="myForm">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-row>
-            <el-col :span="20">
-              <el-form-item label="类型：">
-                <el-radio-group @change="changeRad" v-model="formInline.rad1" size="small">
-                  <el-radio-button v-for="(item,i) in radioArr" :key="i" :label="i">{{item}}</el-radio-button>
-                </el-radio-group>
+      <div class="myForm">
+        <el-form :inline="true" label-width="110px" :model="formInline" class="demo-form-inline">
+          <el-form-item label="类型：">
+            <el-radio-group v-model="formInline.rad1" size="small" @change="changRad1">
+              <el-radio-button label="0">客服电话</el-radio-button>
+              <el-radio-button label="1">邮箱</el-radio-button>
+              <el-radio-button label="2">公众号二维码</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-row :span="22" v-if="formInline.rad1 == 0">
+            <el-col style="margin-top:20px">
+              <el-form-item label="客服电话：">
+                <el-input size="small" v-model="formInline.mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-        </el-form>
-      </div>-->
-      <!-- <div class="tit1">
-        <el-button @click="addWenzhang" size="small" type="primary" icon="el-icon-plus">添加文章</el-button>
-      </div>-->
-      <div class="myTable">
-        <vxe-table :data="tableData">
-          <vxe-table-column field="id" title="ID"></vxe-table-column>
-          <vxe-table-column field="name" title="名称"></vxe-table-column>
-          <vxe-table-column field="value" title="内容"></vxe-table-column>
-          <vxe-table-column title="操作状态" width="160">
-            <template slot-scope="scope">
-              <div class="flex">
-                <el-button size="small" @click="tabEdit(scope.row)" type="text">编辑</el-button>
-                <!-- <el-button size="small" @click="tabDel(scope.row)" type="text">删除</el-button> -->
-              </div>
-            </template>
-          </vxe-table-column>
-        </vxe-table>
-      </div>
-    </div>
-    <!-- 编辑设置 -->
-    <el-dialog
-      title="编辑设置"
-      :visible.sync="addDialogVisible"
-      width="400px"
-      :before-close="addHandleClose"
-    >
-      <div class="myAddForm">
-        <el-form :model="lhForm" ref="lhForm" label-width="60px" class="demo-addForm">
-          <el-row>
-            <el-col :span="20">
-              <el-form-item label="设置名称：">
-                <el-input disabled size="small" placeholder="请输入设置名称" v-model="lhForm.name"></el-input>
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="系统邮箱服务器：">
+                <el-input size="small" v-model="formInline.host"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="20">
-              <el-form-item label="名称描述：">
-                <el-input disabled size="small" placeholder="请输入名称描述" v-model="lhForm.tag"></el-input>
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="邮箱名：">
+                <el-input size="small" v-model="formInline.username"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-if="lhForm.tag != 'img'">
-            <el-col :span="20" >
-              <el-form-item label="设置值：">
-                <el-input size="small" placeholder="请输入设置值" v-model="lhForm.value"></el-input>
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="邮箱密码：">
+                <el-input size="small" v-model="formInline.password"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-else>
-            <el-col :span="18">
-              <el-form-item label="设置值：">
-                <div @click="companyList" class="myImg">
-                  <el-image :src="lhForm.value" fit="fill" style="width: 60px; height: 60px">
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="邮箱端口：">
+                <el-input size="small" v-model="formInline.port"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="协议：">
+                <el-input size="small" v-model="formInline.protocol"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :span="22" v-if="formInline.rad1 == 1">
+            <el-col style="margin-top:20px">
+              <el-form-item label="默认编码：">
+                <el-input size="small" v-model="formInline.defaultEncode"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :span="22" v-if="formInline.rad1 == 2">
+            <el-col style="margin-top:20px">
+              <el-form-item label="图片：">
+                <div @click="companyList('tx')" class="myImg">
+                  <el-image :src="formInline.qcode" fit="fill" style="width: 200px; height: 200px">
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
                   </el-image>
-                  <div @click.stop="delImg" class="closeBtn">
-                    <el-button circle>×</el-button>
-                  </div>
                 </div>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="20">
-              <el-form-item>
-                <el-button size="small" type="primary" @click="AddOnSubmit">提交</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
         </el-form>
+        <div class="btnflex">
+          <!-- <el-button size="small" type="primary" @click="submitForm('ruleForm', '3')">下一步</el-button> -->
+          <el-button size="small" type="primary" @click="onSubmitForm">保存</el-button>
+        </div>
       </div>
-    </el-dialog>
+    </div>
     <input
       type="file"
       name="companyLogo"
@@ -105,163 +95,207 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+// import E from "wangeditor";
 export default {
-  computed: {
-    ...mapState(["qitashezhiliebiaoPage", "qitashezhiliebiaoPageSize"])
-  },
-  watch: {
-    qitashezhiliebiaoPage: function(page) {
-      this.$store.commit("qitashezhiliebiaoPage", page);
-      this.getData();
-    },
-    qitashezhiliebiaoPageSize: function(pageSize) {
-      this.$store.commit("qitashezhiliebiaoPageSize", pageSize);
-      this.getData();
-    }
-  },
   data() {
     return {
-      addDialogVisible: false,
-      editor: null,
-      tableData: [],
-      total: 0,
-      lhDialogVisible: false,
-      lhForm: {
-        key: "",
-        value: "",
-        desc: ""
+      file:null,
+      emailId: "",
+      formInline: {
+        rad1: "0",
+        desc: "",
+        host: "",
+        mobile:'',
       },
+      editor: null,
       imgFile: null,
-      isAdd: true
+      ruleForm: {
+        img: "",
+        other_url: ""
+      },
+      content: ""
     };
   },
   created() {
+    this.imgFile = new FormData();
     this.getData();
+    this.getKefu();
   },
   methods: {
     async getData() {
-      const res = await this.$api.webconfig_detail();
-      this.tableData = res.data;
-    },
-    addHandleClose() {
-      this.addDialogVisible = false;
-    },
-    async companyLogo(event) {
-      var file = event.target.files[0];
-      this.imgFile = new FormData();
-      this.imgFile.append("image", file);
-      sessionStorage.setItem("img", 123);
-      const res = await this.$api.productUpload(this.imgFile);
+      const res = await this.$api.mGeteandp({
+        type: this.formInline.rad1
+      });
       console.log(res);
-      this.$set(this.lhForm, "value", res);
-      this.$refs.fileInputList.value = "";
+      this.formInline.desc = res.data;
+      if (this.content) {
+        this.editor.txt.html(this.content);
+      }
     },
     // 上传图片
-    companyList() {
+    companyList(val, i = 0) {
+      this.imgIndex = i;
+      this.imgStatus = val;
       this.$refs.fileInputList.click();
     },
-    async AddOnSubmit() {
-      const res = await this.$api.webconfig_update({
-        value: this.lhForm.value,
-        tag: this.lhForm.tag
-      });
+    async companyLogo(event) {
+      this.file = event.target.files[0];
+      let url = null;
+      if (window.createObjectURL != undefined) {
+        // basic
+        url = window.createObjectURL(this.file);
+      } else if (window.webkitURL != undefined) {
+        // webkit or chrome
+        url = window.webkitURL.createObjectURL(this.file);
+      } else if (window.URL != undefined) {
+        // mozilla(firefox)
+        url = window.URL.createObjectURL(this.file);
+      }
+      console.log(url);
+      this.$set(this.formInline, "qcode", url);
+    },
+    async getKefu() {
+      const res = await this.$api.mGetkfmb();
       console.log(res);
-      if (res.code == 200) {
-        this.$message({
-          message: "修改成功",
-          type: "success"
-        });
-        this.getData();
-        this.addDialogVisible = false;
-      } else {
-        this.$message.error(res.msg);
-      }
+      this.formInline.mobile = res.data
     },
-    async submitForm() {
-      // 添加
-      if (this.isAdd) {
-        const res = await this.$api.article_add({
-          ...this.lhForm
+    async getErweima(){
+      const res = await this.$api.ermw();
+      this.$set(this.formInline,'qcode',res.data.qcode)
+    },
+    async getEmail() {
+      const res = await this.$api.memailEmails();
+      const eml = res.data.data[0];
+      this.emailId = eml.id;
+      this.formInline.defaultEncode = eml.defaultEncode;
+      this.formInline.host = eml.host;
+      this.formInline.port = eml.port;
+      this.formInline.protocol = eml.protocol;
+      this.formInline.username = eml.username;
+    },
+    async onSubmitForm() {
+      if (this.formInline.rad1 == "1") {
+        const res = await this.$api.memailInfo({
+          id: this.emailId,
+          defaultEncode: this.formInline.defaultEncode,
+          host: this.formInline.host,
+          port: this.formInline.port,
+          protocol: this.formInline.protocol,
+          username: this.formInline.username,
+          password:
+            this.formInline.password == "" ? null : this.formInline.password
         });
-        console.log(res);
-        if (res.code == 200) {
+        if (res.status == 0) {
           this.$message({
             message: res.msg,
             type: "success"
           });
-          this.getData();
-          this.lhDialogVisible = false;
-        } else {
-          this.$message.error(res.msg);
+          this.getEmail();
         }
-      } else {
-        //  修改
-        const res = await this.$api.article_edit({
-          ...this.lhForm,
-          id: this.id
+      }else if(this.formInline.rad1 == "0"){
+        const res = await this.$api.mUpdateKfMobile({
+          mobile: this.formInline.mobile,
         });
-        console.log(res);
-        if (res.code == 200) {
+        if (res.status == 0) {
           this.$message({
             message: res.msg,
             type: "success"
           });
-          this.getData();
-          this.lhDialogVisible = false;
-        } else {
-          this.$message.error(res.msg);
+          this.getKefu();
+        }
+      }else if(this.formInline.rad1 == "2"){
+        // mUpdateQcode
+        console.log(this.file)
+        if (!this.file) {
+          this.file = null;
+        }
+        this.imgFile.append("file", this.file);
+        const res = await this.$api.mUpdateQcode(this.imgFile);
+        if (res.status == 0) {
+          this.$message({
+            message: res.msg,
+            type: "success"
+          });
+          this.getErweima();
         }
       }
     },
-    // 编辑
-    tabEdit(row) {
-      console.log(row)
-      this.id = row.id;
-      this.lhForm.name = row.name;
-      this.lhForm.tag = row.tag;
-      this.lhForm.value = row.value;
-      this.addDialogVisible = true;
+    changRad1(e) {
+      console.log(e);
+      if (e == 0) {
+        this.getKefu();
+      } else if (e == 1) {
+        this.getEmail();
+      }else if(e==2){
+        this.getErweima();
+      }
+      // this.getData();
     },
-    // 删除
-    async tabDel(row) {
-      const res = await this.$api.article_del({
-        id: row.id
+    readFileAsBuffer(file) {
+      const reader = new FileReader();
+      return new Promise(resolve => {
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          const base64File = reader.result.replace(
+            /^data:\w+\/\w+;base64,/,
+            ""
+          );
+          resolve(new window.OSS.Buffer(base64File, "base64"));
+        };
       });
-      if (res.code == 200) {
-        this.$message({
-          message: res.msg,
-          type: "success"
-        });
-        this.getData();
-        this.lhDialogVisible = false;
-      } else {
-        this.$message.error(res.msg);
-      }
-    },
-    addWenzhang() {
-      this.lhForm = {
-        title: "",
-        content: ""
-      };
-      this.isAdd = true;
-      // this.lhDialogVisible = true;
-      this.$store.commit("wenzhangObj", null);
-      this.$router.push({ name: "Tianjiawenzhang" });
-    },
-    lhHandleClose() {
-      this.lhDialogVisible = false;
-    },
-    // 分页
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.$store.commit("qitashezhiliebiaoPageSize", val);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.$store.commit("qitashezhiliebiaoPage", val);
     }
   }
+  // async mounted() {
+  //   this.editor = new E("#editor");
+  //   this.editor.config.menus = [
+  //     "head",
+  //     "bold",
+  //     "fontSize",
+  //     "fontName",
+  //     "italic",
+  //     "underline",
+  //     "strikeThrough",
+  //     "indent",
+  //     "lineHeight",
+  //     "foreColor",
+  //     "backColor",
+  //     "list",
+  //     "justify",
+  //     "emoticon",
+  //     "image",
+  //     "table",
+  //     "undo",
+  //     "redo"
+  //   ];
+  //   this.editor.config.uploadImgServer = "/upload-img";
+  //   // this.editor.config.uploadImgShowBase64 = true; // 使用 base64 保存图片
+  //   const res = await this.$api.uploadToken();
+  //   let myData = res.data;
+  //   let client = new window.OSS.Wrapper({
+  //     region: myData.region, //oss地址
+  //     accessKeyId: myData.accessKeyId, //ak
+  //     accessKeySecret: myData.accessKeySecret, //secret
+  //     stsToken: myData.stsToken,
+  //     bucket: myData.bucket //oss名字
+  //   });
+  //   this.editor.config.customUploadImg = async (resultFiles, insertImgFn) => {
+  //     var file_re = await this.readFileAsBuffer(resultFiles[0]);
+  //     client
+  //       .put("myImg", file_re)
+  //       .then(function(res) {
+  //         // 上传图片，返回结果，将图片插入到编辑器中
+  //         console.log(res);
+  //         insertImgFn(res.url);
+  //       })
+  //       .catch(function(err) {
+  //         console.log(err);
+  //       });
+  //   };
+  //   this.editor.create();
+  //   if (this.content) {
+  //     this.editor.txt.html(this.content);
+  //   }
+  // }
 };
 </script>
 
@@ -278,15 +312,6 @@ export default {
     font-size: 20px;
     padding-bottom: 20px;
   }
-  .tit2 {
-    margin-top: 10px;
-    /deep/ .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
-      padding-left: 20px;
-    }
-    /deep/ .el-tabs__header {
-      margin: 0 0 1px;
-    }
-  }
 }
 .nav2 {
   margin: 18px 0;
@@ -300,102 +325,52 @@ export default {
     /deep/ .el-form-item {
       margin-right: 30px;
       margin-bottom: 0;
+      width: 100%;
     }
-    .search {
-      /deep/ .el-select {
-        width: 100px;
-      }
+    /deep/ .el-form-item__content {
+      width: 90%;
     }
   }
-  .tit1 {
-    margin-top: 10px;
-  }
-  .myTable {
-    margin-top: 10px;
-    .xiala {
-      padding: 10px 20px;
-      .item {
-        font-size: 12px;
+  .myImg {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    margin-right: 12px;
+    .closeBtn {
+      position: absolute;
+      top: -6px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      .el-button {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-    }
-    .flex {
-      display: flex;
-      align-items: center;
-    }
-    .fenye {
-      margin-top: 10px;
-    }
-    /deep/ .vxe-table--render-default .vxe-body--column {
-      line-height: 14px;
-      vertical-align: middle;
-    }
-    /deep/ .vxe-cell--label {
-      font-size: 12px;
-    }
-    /deep/ .vxe-cell--title {
-      font-size: 12px;
     }
     /deep/ .image-slot {
-      width: 38px;
-      height: 38px;
       border: 1px solid #ddd;
-      line-height: 38px;
-      text-align: center;
       border-radius: 4px;
-    }
-  }
-}
-.lhmyForm {
-  /deep/ .el-form-item__label {
-    font-size: 12px;
-  }
-  /deep/ .el-form-item {
-    margin-right: 30px;
-    margin-bottom: 20px;
-  }
-  .search {
-    margin-top: 3px;
-    /deep/ .el-select {
-      width: 100px;
-    }
-  }
-}
-.myImg {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  display: inline-block;
-  margin-right: 12px;
-  .closeBtn {
-    position: absolute;
-    top: -6px;
-    right: -4px;
-    width: 20px;
-    height: 20px;
-    .el-button {
-      width: 100%;
-      height: 100%;
+      background-color: #fafafa;
+      width: 198px;
+      height: 198px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-  }
-  /deep/ .image-slot {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fafafa;
-    width: 58px;
-    height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    .el-icon-picture-outline {
-      font-size: 20px;
+      cursor: pointer;
+      .el-icon-picture-outline {
+        font-size: 20px;
+      }
     }
   }
 }
-// 详情
+.displayN {
+  display: none;
+}
+// 商品详情
 .myEditor {
   padding-top: 20px;
   display: flex;
@@ -411,25 +386,8 @@ export default {
     transform: translateY(-6px);
   }
 }
-.myAddForm {
-  /deep/ .el-select {
-    width: 100%;
-  }
-  /deep/ .el-form-item__label {
-    font-size: 12px;
-    width: 100px !important;
-  }
-  /deep/ .el-form-item__content {
-    margin-left: 100px !important;
-  }
-  /deep/ .el-radio__label {
-    font-size: 12px;
-  }
-  /deep/ .el-button {
-    width: 100%;
-  }
-}
-.displayN {
-  display: none;
+.btnflex {
+  margin-top: 20px;
+  margin-left: 48px;
 }
 </style>
